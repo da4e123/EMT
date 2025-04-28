@@ -1,6 +1,6 @@
-package org.example.lab1.service;
+package org.example.lab1.service.domain;
 
-import org.example.lab1.model.Author;
+import org.example.lab1.model.domain.Author;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +12,8 @@ public interface AuthorService {
 
     List<Author> listAllAuthors();
     Optional<Author> findById(Long id);
-    Optional<Author> create(String name, String surname, Long countryId);
+    Optional<Author> create(Author author);
 
-    Optional<Author> update(Long authorId, String name, String surname, Long countryId);
+    Optional<Author> update(Long authorId, Author author);
     Optional<Author> delete(Long id);
 }

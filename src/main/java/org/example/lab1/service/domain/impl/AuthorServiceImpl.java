@@ -1,12 +1,12 @@
-package org.example.lab1.service.impl;
+package org.example.lab1.service.domain.impl;
 
-import org.example.lab1.model.Author;
-import org.example.lab1.model.Country;
+import org.example.lab1.model.domain.Author;
+import org.example.lab1.model.domain.Country;
 import org.example.lab1.model.exceptions.InvalidAuthorId;
 import org.example.lab1.model.exceptions.InvalidCountryId;
 import org.example.lab1.repository.AuthorRepository;
-import org.example.lab1.service.AuthorService;
-import org.example.lab1.service.CountryService;
+import org.example.lab1.service.domain.CountryService;
+import org.example.lab1.service.domain.AuthorService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,20 +32,33 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Optional<Author> create(String name, String surname, Long countryId) {
-        Country country = countryService.findCountryById(countryId).orElseThrow(InvalidCountryId::new);
-        return Optional.of(authorRepository.save(new Author(name,surname,country)));
+    public Optional<Author> create(Author author) {
+        return Optional.of(authorRepository.save(author));
     }
 
     @Override
-    public Optional<Author> update(Long authorId, String name, String surname, Long countryId) {
-        Author author = findById(authorId).orElseThrow(InvalidAuthorId::new);
-        Country country = countryService.findCountryById(countryId).orElseThrow(InvalidCountryId::new);
-        author.setName(name);
-        author.setSurname(surname);
-        author.setCountry(country);
-        return Optional.of(authorRepository.save(author));
+    public Optional<Author> update(Long authorId, Author author) {
+
+        return authorRepository.findById(authorId).map(existingAuthor -> {
+                    if(author.getName() != null){
+                        existingAuthor.setName(author.getName());
+                    }
+                    if (author.getSurname() != null){
+                        existingAuthor.setSurname(author.getSurname());
+                    }
+
+                    if (author.getCountry() != null){
+                        existingAuthor.setCountry(author.getCountry());
+                    }
+
+                    return authorRepository.save(existingAuthor);
+
+
+    });
     }
+
+
+
 
     @Override
     public Optional<Author> delete(Long id) {

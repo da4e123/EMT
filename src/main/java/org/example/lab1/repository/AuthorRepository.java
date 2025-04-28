@@ -1,6 +1,6 @@
 package org.example.lab1.repository;
 
-import org.example.lab1.model.Author;
+import org.example.lab1.model.domain.Author;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

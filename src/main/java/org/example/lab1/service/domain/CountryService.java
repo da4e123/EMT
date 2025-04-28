@@ -1,6 +1,6 @@
-package org.example.lab1.service;
+package org.example.lab1.service.domain;
 
-import org.example.lab1.model.Country;
+import org.example.lab1.model.domain.Country;
 import org.example.lab1.model.dto.CountryDto;
 import org.example.lab1.model.exceptions.InvalidCountryId;
 
@@ -11,8 +11,8 @@ public interface CountryService {
     List<Country> listAllCountries();
     Optional<Country> findCountryById(Long countryId);
 
-    Optional<Country> create(String name, String continent);
-    Optional<Country> update(Long id, String name, String continent);
+    Optional<Country> create(Country country);
+    Optional<Country> update(Long id, Country country);
 
     Optional<Country> deleteCountry(Long id);
 }

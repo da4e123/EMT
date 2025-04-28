@@ -1,21 +1,22 @@
-package org.example.lab1.service.impl;
+package org.example.lab1.service.domain.impl;
 
-import org.example.lab1.model.Author;
-import org.example.lab1.model.Book;
-import org.example.lab1.model.dto.BookDto;
+import org.example.lab1.model.domain.Author;
+import org.example.lab1.model.domain.Book;
 import org.example.lab1.model.enums.Category;
 import org.example.lab1.model.exceptions.InvalidAuthorId;
 import org.example.lab1.model.exceptions.InvalidBookId;
 import org.example.lab1.repository.BookRepository;
-import org.example.lab1.service.AuthorService;
-import org.example.lab1.service.BookService;
+import org.example.lab1.service.domain.BookService;
+import org.example.lab1.service.domain.AuthorService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService {
+
 
     private final BookRepository bookRepository;
     private final AuthorService authorService;
@@ -36,36 +37,44 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> create(String name, Category category, Long authorId, Integer avalailableCopies) {
-        Author author = authorService.findById(authorId).orElseThrow(InvalidAuthorId::new);
-        Book book = new Book(name,category,author,avalailableCopies);
+    public Optional<Book> create(Book book) {
         return Optional.of(bookRepository.save(book));
     }
 
     @Override
-    public Optional<Book> update(Long id, String name, Category category, Long authorId, Integer availableCopies) {
-        Book book = findById(id).orElseThrow(InvalidBookId::new);
-        Author author = authorService.findById(authorId).orElseThrow(InvalidAuthorId::new);
-        book.setName(name);
-        book.setAuthor(author);
-        book.setCategory(category);
-        book.setAvailableCopies(availableCopies);
-        return Optional.of(bookRepository.save(book));
+    public Optional<Book> update(Long id, Book book) {
+        return bookRepository.findById(id).map(existingBook -> {
+            if(book.getName() != null){
+                existingBook.setName(book.getName());
+            }
+            if (book.getAuthor() != null){
+                existingBook.setAuthor(book.getAuthor());
+            }
+
+            if (book.getCategory() != null){
+                existingBook.setCategory(book.getCategory());
+            }
+            if (book.getAvailableCopies() != null){
+                existingBook.setAvailableCopies(book.getAvailableCopies());
+            }
+
+            return bookRepository.save(existingBook);
+
+
+        });
     }
 
     @Override
-    public Optional<Book> delete(Long id) {
-        Book book = findById(id).orElseThrow(InvalidBookId::new);
+    public void deleteById(Long id) {
         bookRepository.deleteById(id);
-        return Optional.of(book);
-
-
     }
+
 
     @Override
     public List<Book> filterByCategory(String category) {
         return listAll().stream().filter(c -> c.getCategory().name().equals(category)).toList();
     }
+
 
 
     @Override

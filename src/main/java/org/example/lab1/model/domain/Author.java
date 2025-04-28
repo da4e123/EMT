@@ -1,4 +1,4 @@
-package org.example.lab1.model;
+package org.example.lab1.model.domain;
 
 
 import jakarta.persistence.*;
@@ -54,5 +54,9 @@ public class Author {
 
     public String getSurname() {
         return surname;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

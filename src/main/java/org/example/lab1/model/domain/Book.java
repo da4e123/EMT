@@ -1,4 +1,4 @@
-package org.example.lab1.model;
+package org.example.lab1.model.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -8,7 +8,6 @@ import org.example.lab1.model.enums.Category;
 
 @Data
 @Entity
-
 public class Book {
 
     @Id
@@ -21,7 +20,6 @@ public class Book {
     private Category category;
 
     @ManyToOne
-
     private Author author;
 
     private Integer availableCopies;
@@ -77,4 +75,7 @@ public class Book {
         this.availableCopies = availableCopies;
     }
 
+    public Long getId() {
+        return id;
+    }
 }

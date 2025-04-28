@@ -1,10 +1,9 @@
-package org.example.lab1.service.impl;
+package org.example.lab1.service.domain.impl;
 
-import org.example.lab1.model.Country;
-import org.example.lab1.model.dto.CountryDto;
+import org.example.lab1.model.domain.Country;
 import org.example.lab1.model.exceptions.InvalidCountryId;
 import org.example.lab1.repository.CountryRepository;
-import org.example.lab1.service.CountryService;
+import org.example.lab1.service.domain.CountryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,16 +28,25 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public Optional<Country> create(String name, String continent) {
-        return Optional.of(countryRepository.save(new Country(name,continent)));
+    public Optional<Country> create(Country country) {
+        return Optional.of(countryRepository.save(country));
     }
 
     @Override
-    public Optional<Country> update(Long id, String name, String continent) {
-        Country country = findCountryById(id).orElseThrow(InvalidCountryId::new);
-        country.setName(name);
-        country.setContinent(continent);
-        return Optional.of(countryRepository.save(country));
+    public Optional<Country> update(Long id, Country country) {
+        return countryRepository.findById(id).map(existingCountry -> {
+            if(country.getName() != null){
+                existingCountry.setName(country.getName());
+            }
+            if (country.getContinent() != null){
+                existingCountry.setContinent(country.getContinent());
+            }
+
+
+            return countryRepository.save(existingCountry);
+        });
+
+
     }
 
     @Override
