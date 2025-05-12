@@ -7,8 +7,10 @@ import org.example.lab1.dto.CreateBookDto;
 import org.example.lab1.dto.DisplayBookDto;
 import org.example.lab1.model.domain.Book;
 import org.example.lab1.model.dto.BookDto;
+import org.example.lab1.service.application.AuthorApplicationService;
 import org.example.lab1.service.application.BookApplicationService;
 import org.example.lab1.service.domain.BookService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +22,11 @@ import java.util.List;
 public class BookRestController {
 
     private final BookApplicationService bookApplicationService;
+    private final AuthorApplicationService authorApplicationService;
 
-    public BookRestController(BookApplicationService bookApplicationService) {
+    public BookRestController(BookApplicationService bookApplicationService, AuthorApplicationService authorApplicationService) {
         this.bookApplicationService = bookApplicationService;
+        this.authorApplicationService = authorApplicationService;
     }
 
     @Operation(summary = "Get all books", description = "Retrieves a list of all books.")
@@ -93,8 +97,26 @@ public class BookRestController {
         List<DisplayBookDto> filteredBooks = bookApplicationService.filterByCategory(category);
         return ResponseEntity.ok(filteredBooks);
     }
-    
 
+
+
+    @Operation(description = "List number of books per author for every author")
+    @GetMapping("/by-author")
+    public ResponseEntity<?> findAllNumbersOfBooksPerAuthor(){
+        return ResponseEntity.status(HttpStatus.OK).body(authorApplicationService.findAllBooksPerAuthor());
+    }
+
+    @Operation(description = "List number of books per author for a given author")
+    @GetMapping("/by-author/{id}")
+    public ResponseEntity<?> findNumberOfBooksPerAuthor(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(authorApplicationService.findBookPerAuthor(id));
+    }
+
+    //Lab 3 - additional task from school
+    @GetMapping("/search{name}")
+    public ResponseEntity<?> searchBookByName(@PathVariable String name){
+        return ResponseEntity.status(HttpStatus.OK).body(bookApplicationService.searchBookByName(name));
+    }
 
 
 

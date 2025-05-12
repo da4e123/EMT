@@ -43,4 +43,6 @@ public class Wishlist {
     public User getUser() {
         return user;
     }
+
+
 }

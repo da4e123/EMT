@@ -1,10 +1,15 @@
 package org.example.lab1.repository;
 
 
+import lombok.NonNull;
 import org.example.lab1.model.domain.User;
+import org.example.lab1.model.projections.UserProjection;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -13,5 +18,15 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByUsernameAndPassword(String username, String password);
 
     Optional<User> findByUsername(String username);
+
+    List<UserProjection> findAllProjectedBy();
+
+    @NonNull
+    @EntityGraph(
+            type = EntityGraph.EntityGraphType.FETCH,
+            attributePaths = {"wishlist"}
+    )
+    @Query("select u from User u")
+    List<User> fetchAll();
 
 }

@@ -35,23 +35,23 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
-    public List<Wishlist> listAll() {
-        return wishlistRepository.findAll();
+    public List<Wishlist> listAll(String token) {
+        return userService.getAuthenticatedUser(token).getWishlist();
     }
 
     @Override
-    public Optional<Wishlist> getWishlistByUsername(String username) {
-        User user = userService.findByUsername(username);
+    public Optional<Wishlist> getWishlistByUsername(String username, String token) {
+        User authUser = userService.getAuthenticatedUser(token);
 
 
-        return Optional.of(wishlistRepository.findByUser(user).orElseGet(() -> wishlistRepository.save(new Wishlist(user))));
+        return Optional.of(wishlistRepository.findByUser(authUser).orElseGet(() -> wishlistRepository.save(new Wishlist(authUser))));
     }
 
     @Override
-    public List<Book> listAllBooksInWishlist(String username) {
-        User user = userService.findByUsername(username);
+    public List<Book> listAllBooksInWishlist(String username, String token) {
+        User authUser = userService.getAuthenticatedUser(token);
 
-        Optional<Wishlist> wishlist = wishlistRepository.findByUser(user);
+        Optional<Wishlist> wishlist = wishlistRepository.findByUser(authUser);
 
         return wishlist.get().getBooks();
     }
@@ -67,16 +67,17 @@ public class WishlistServiceImpl implements WishlistService {
 //    }
 
     @Override
-    public Optional<Wishlist> addBookInWishList(String username, Long bookId) {
+    public Optional<Wishlist> addBookInWishList(String username, Long bookId, String token) {
 
-        if (getWishlistByUsername(username).isPresent()){
-            User user = userService.findByUsername(username);
+
+        if (getWishlistByUsername(username, token).isPresent()){
+            User authUser = userService.getAuthenticatedUser(token);
             Book book = bookService.findById(bookId).orElseThrow(InvalidBookId::new);
             if (book.getAvailableCopies() <= 0){
                 throw new NotAvailableCopiesOfThisBook();
             }
-            Wishlist wishlist = wishlistRepository.findByUser(user)
-                            .orElse(new Wishlist(user));
+            Wishlist wishlist = wishlistRepository.findByUser(authUser)
+                            .orElse(new Wishlist(authUser));
 
 
             wishlist.getBooks().add(book);
@@ -90,10 +91,10 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
-    public void rentAllFromWishlist(String username) {
+    public void rentAllFromWishlist(String username, String token) {
 
-        User user = userService.findByUsername(username);
-        Wishlist wishlist = wishlistRepository.findByUser(user).orElseThrow(() -> new RuntimeException("Wishlist not found for user!"));
+        User authUser = userService.getAuthenticatedUser(token);
+        Wishlist wishlist = wishlistRepository.findByUser(authUser).orElseThrow(() -> new RuntimeException("Wishlist not found for user!"));
 
         if (wishlist.getBooks().isEmpty()){
             throw new RuntimeException("Wishlist is empty!");

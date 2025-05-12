@@ -5,11 +5,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.lab1.dto.CreateUserDto;
 import org.example.lab1.dto.DisplayUserDto;
-import org.example.lab1.dto.LoginUserDto;
+import org.example.lab1.model.dto.login.LoginResponseDto;
+import org.example.lab1.model.dto.login.LoginUserDto;
 import org.example.lab1.model.exceptions.InvalidCredentialsException;
+import org.example.lab1.model.projections.UserProjection;
 import org.example.lab1.service.application.UserApplicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -34,24 +38,27 @@ public class UserController {
     @Operation(summary = "User login", description = "Authenticates a user and starts a session")
 
     @PostMapping("/login")
-    public ResponseEntity<DisplayUserDto> login(HttpServletRequest request) {
-        try {
-            DisplayUserDto displayUserDto = userApplicationService.login(
-                    new LoginUserDto(request.getParameter("username"), request.getParameter("password"))
-            ).orElseThrow(InvalidCredentialsException::new);
-
-        request.getSession().setAttribute("user", displayUserDto.toUser());
-        return ResponseEntity.ok(displayUserDto);
-    } catch (InvalidCredentialsException e){
-            return ResponseEntity.notFound().build();
-        }
-
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginUserDto loginUserDto) {
+        LoginResponseDto body = userApplicationService.login(loginUserDto).orElseThrow();
+        return ResponseEntity.ok(body);
     }
 
-    @Operation(summary = "User logout", description = "End's the user's session")
+//    @Operation(summary = "User logout", description = "End's the user's session")
+//    @GetMapping("/logout")
+//    public void logout(HttpServletRequest request){
+//        request.getSession().invalidate();
+//    }
 
-    @GetMapping("/logout")
-    public void logout(HttpServletRequest request){
-        request.getSession().invalidate();
+    @GetMapping("/names")
+    public List<UserProjection> getAllUserNames(){
+        return userApplicationService.getAllUserNames();
     }
+
+    @Operation(summary = "Fetched all users")
+    @GetMapping("users")
+
+    public ResponseEntity<?> fetchAll(HttpServletRequest request){
+        return ResponseEntity.ok(userApplicationService.fetchAll());
+    }
+
 }

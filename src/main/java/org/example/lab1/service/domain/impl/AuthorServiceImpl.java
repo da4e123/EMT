@@ -2,8 +2,10 @@ package org.example.lab1.service.domain.impl;
 
 import org.example.lab1.model.domain.Author;
 import org.example.lab1.model.domain.Country;
+import org.example.lab1.model.dto.AuthorDto;
 import org.example.lab1.model.exceptions.InvalidAuthorId;
 import org.example.lab1.model.exceptions.InvalidCountryId;
+import org.example.lab1.model.projections.AuthorProjection;
 import org.example.lab1.repository.AuthorRepository;
 import org.example.lab1.service.domain.CountryService;
 import org.example.lab1.service.domain.AuthorService;
@@ -66,5 +68,18 @@ public class AuthorServiceImpl implements AuthorService {
         authorRepository.delete(author);
         return Optional.of(author);
 
+    }
+
+    @Override
+    public List<AuthorProjection> findAllAuthorsNames() {
+        return authorRepository.takeNameAndSurnameByProjection();
+    }
+
+
+    //Lab 3 - additional task from school
+    @Override
+    public List<AuthorDto> findByCountry(Long countryId) {
+
+        return authorRepository.findByCountryId(countryId);
     }
 }

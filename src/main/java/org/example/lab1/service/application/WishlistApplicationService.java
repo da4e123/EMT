@@ -9,10 +9,10 @@ import java.util.Optional;
 
 public interface WishlistApplicationService {
 
-    List<WishlistDto> listAll();
-    List<Book> listAllBooksInWishlist(String username);
+    List<WishlistDto> listAll(String token);
+    List<Book> listAllBooksInWishlist(String username, String token);
 
-    Optional<WishlistDto> addBookInWishList(String username, Long bookId);
+    Optional<WishlistDto> addBookInWishList(String username, Long bookId, String token);
 
-    void rentAllFromWishlist(String username);
+    void rentAllFromWishlist(String username, String token);
 }

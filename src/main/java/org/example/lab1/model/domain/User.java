@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Data
 @Entity
@@ -22,6 +23,9 @@ public class User implements UserDetails {
     private String name;
 
     private String surname;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Wishlist> wishlist;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
@@ -94,5 +98,9 @@ public class User implements UserDetails {
 
     public String getPassword() {
         return password;
+    }
+
+    public List<Wishlist> getWishlist() {
+        return wishlist;
     }
 }

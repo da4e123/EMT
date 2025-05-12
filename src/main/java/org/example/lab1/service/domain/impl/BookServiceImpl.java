@@ -91,4 +91,11 @@ public class BookServiceImpl implements BookService {
         this.bookRepository.save(book);
 
     }
+
+    //Lab 3 - additional task from school
+    @Override
+    public Book searchByName(String title) {
+        return bookRepository.searchBookByName(title);
+    }
+
 }

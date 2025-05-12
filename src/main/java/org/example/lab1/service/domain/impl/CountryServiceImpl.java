@@ -1,6 +1,7 @@
 package org.example.lab1.service.domain.impl;
 
 import org.example.lab1.model.domain.Country;
+import org.example.lab1.model.dto.AuthorDto;
 import org.example.lab1.model.exceptions.InvalidCountryId;
 import org.example.lab1.repository.CountryRepository;
 import org.example.lab1.service.domain.CountryService;
@@ -55,4 +56,12 @@ public class CountryServiceImpl implements CountryService {
         countryRepository.delete(country);
         return Optional.of(country);
     }
+
+    //Lab 3 - additional task from school
+    @Override
+    public List<Country> findByContinent(String continent) {
+        return countryRepository.findByContinent(continent);
+    }
+
+
 }

@@ -3,9 +3,16 @@ package org.example.lab1.service.application.impl;
 
 import org.example.lab1.dto.CreateAuthorDto;
 import org.example.lab1.dto.DisplayAuthorDto;
+import org.example.lab1.model.domain.Author;
+import org.example.lab1.model.domain.Country;
+import org.example.lab1.model.dto.AuthorDto;
 import org.example.lab1.model.exceptions.InvalidAuthorId;
+import org.example.lab1.model.projections.AuthorProjection;
+import org.example.lab1.model.views.BooksPerAuthorView;
+import org.example.lab1.repository.BooksPerAuthorViewRepository;
 import org.example.lab1.service.application.AuthorApplicationService;
 import org.example.lab1.service.domain.AuthorService;
+import org.example.lab1.service.domain.CountryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +22,14 @@ import java.util.Optional;
 public class AuthorApplicationServiceImpl implements AuthorApplicationService {
 
     public final AuthorService authorService;
+    public final BooksPerAuthorViewRepository booksPerAuthorViewRepository;
+    private final CountryService countryService;
 
 
-    public AuthorApplicationServiceImpl(AuthorService authorService) {
+    public AuthorApplicationServiceImpl(AuthorService authorService, BooksPerAuthorViewRepository booksPerAuthorViewRepository, CountryService countryService) {
         this.authorService = authorService;
+        this.booksPerAuthorViewRepository = booksPerAuthorViewRepository;
+        this.countryService = countryService;
     }
 
 
@@ -45,6 +56,33 @@ public class AuthorApplicationServiceImpl implements AuthorApplicationService {
     @Override
     public void deleteById(Long id) {
         authorService.delete(id);
+    }
+
+    @Override
+    public List<BooksPerAuthorView> findAllBooksPerAuthor() {
+        return booksPerAuthorViewRepository.findAll();
+    }
+
+    @Override
+    public BooksPerAuthorView findBookPerAuthor(Long id) {
+        return booksPerAuthorViewRepository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public void refreshMaterializedView() {
+        booksPerAuthorViewRepository.refreshMaterializedView();
+    }
+
+    @Override
+    public List<AuthorProjection> findAllAuthorsNames() {
+        return authorService.findAllAuthorsNames();
+    }
+
+
+    //Lab 3 - additional task from school
+    @Override
+    public List<AuthorDto> findByCountry(Long countryId) {
+        return authorService.findByCountry(countryId);
     }
 
 

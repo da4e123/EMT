@@ -1,6 +1,8 @@
 package org.example.lab1.service.domain;
 
 import org.example.lab1.model.domain.Author;
+import org.example.lab1.model.dto.AuthorDto;
+import org.example.lab1.model.projections.AuthorProjection;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,4 +18,9 @@ public interface AuthorService {
 
     Optional<Author> update(Long authorId, Author author);
     Optional<Author> delete(Long id);
+
+    List<AuthorProjection> findAllAuthorsNames();
+
+    //Lab 3 - additional task from school
+    List<AuthorDto> findByCountry(Long countryId);
 }

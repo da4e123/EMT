@@ -8,6 +8,7 @@ import org.example.lab1.model.domain.Country;
 import org.example.lab1.model.dto.CountryDto;
 import org.example.lab1.service.application.CountryApplicationService;
 import org.example.lab1.service.domain.CountryService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,6 +60,12 @@ public class CountryRestController {
         return countryApplicationService.deleteCountry(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    //Lab 3 - additional task from school
+    @GetMapping("/by-continent{continent}")
+    public ResponseEntity<?> getAllCountriesByContinent(@PathVariable String continent){
+        return ResponseEntity.status(HttpStatus.OK).body(countryApplicationService.findByContinent(continent));
     }
 
 

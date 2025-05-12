@@ -8,7 +8,9 @@ import org.example.lab1.dto.DisplayAuthorDto;
 import org.example.lab1.model.domain.Author;
 import org.example.lab1.model.dto.AuthorDto;
 import org.example.lab1.service.application.AuthorApplicationService;
+import org.example.lab1.service.application.CountryApplicationService;
 import org.example.lab1.service.domain.AuthorService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +21,11 @@ import java.util.List;
 @Tag(name = "Author API", description = "Endpoints for managing authors")
 public class AuthorRestController {
     private final AuthorApplicationService authorApplicationService;
+    private final CountryApplicationService countryApplicationService;
 
-    public AuthorRestController(AuthorApplicationService authorApplicationService) {
+    public AuthorRestController(AuthorApplicationService authorApplicationService, CountryApplicationService countryApplicationService) {
         this.authorApplicationService = authorApplicationService;
+        this.countryApplicationService = countryApplicationService;
     }
 
 
@@ -62,6 +66,35 @@ public class AuthorRestController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+
+    @Operation(description = "List number of authors per country a for every country")
+    @GetMapping("/by-country")
+
+    public ResponseEntity<?> findAllNumberOfAuthorsByCountry(){
+        return ResponseEntity.status(HttpStatus.OK).body(countryApplicationService.findAllAuthorsByCountry());
+
+    }
+
+    @Operation(description = "List number of authors per country a for every country")
+    @GetMapping("/by-country/{id}")
+
+    public ResponseEntity<?> findNumberOfAuthorsByCountry(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(countryApplicationService.findAuthorsByCountry(id));
+
+    }
+
+    @Operation(description = "List all authors names")
+    @GetMapping("/names")
+    public ResponseEntity<?> listAllAuthorsNames(){
+        return ResponseEntity.status(HttpStatus.OK).body(authorApplicationService.findAllAuthorsNames());
+    }
+
+    //Lab 3 - additional task from school
+    @GetMapping("/by_country/{id}")
+    public ResponseEntity<?> findByCountryId(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(authorApplicationService.findByCountry(id));
     }
 
 

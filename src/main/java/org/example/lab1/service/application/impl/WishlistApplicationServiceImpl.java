@@ -25,13 +25,13 @@ public class WishlistApplicationServiceImpl implements WishlistApplicationServic
     }
 
     @Override
-    public List<WishlistDto> listAll() {
-        return WishlistDto.from(wishlistService.listAll());
+    public List<WishlistDto> listAll(String token) {
+        return WishlistDto.from(wishlistService.listAll(token));
     }
 
     @Override
-    public List<Book> listAllBooksInWishlist(String username) {
-        return wishlistService.listAllBooksInWishlist(username);
+    public List<Book> listAllBooksInWishlist(String username, String token) {
+        return wishlistService.listAllBooksInWishlist(username,token);
     }
 
 //    @Override
@@ -41,12 +41,12 @@ public class WishlistApplicationServiceImpl implements WishlistApplicationServic
 //    }
 
     @Override
-    public Optional<WishlistDto> addBookInWishList(String username, Long bookId) {
-        return wishlistService.addBookInWishList(username,bookId).map(WishlistDto::from);
+    public Optional<WishlistDto> addBookInWishList(String username, Long bookId, String token) {
+        return wishlistService.addBookInWishList(username,bookId, token).map(WishlistDto::from);
     }
 
     @Override
-    public void rentAllFromWishlist(String username) {
-        wishlistService.rentAllFromWishlist(username);
+    public void rentAllFromWishlist(String username, String token) {
+        wishlistService.rentAllFromWishlist(username, token);
     }
 }

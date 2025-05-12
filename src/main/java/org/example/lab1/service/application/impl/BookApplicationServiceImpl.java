@@ -3,6 +3,7 @@ package org.example.lab1.service.application.impl;
 import org.example.lab1.dto.CreateBookDto;
 import org.example.lab1.dto.DisplayBookDto;
 import org.example.lab1.model.domain.Author;
+import org.example.lab1.model.domain.Book;
 import org.example.lab1.model.enums.Category;
 import org.example.lab1.model.exceptions.InvalidAuthorId;
 import org.example.lab1.service.application.BookApplicationService;
@@ -71,5 +72,12 @@ public class BookApplicationServiceImpl implements BookApplicationService {
     @Override
     public void returnCopy(Long id) {
         bookService.returnCopy(id);
+    }
+
+
+    //Lab 3 - additional task from school
+    @Override
+    public Book searchBookByName(String query) {
+        return bookService.searchByName(query);
     }
 }

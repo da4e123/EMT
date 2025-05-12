@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
+    //Lab 3 - additional task from school
+    Book searchBookByName(String name);
+
 }

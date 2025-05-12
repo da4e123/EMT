@@ -23,4 +23,7 @@ public interface BookApplicationService {
 
     void getCopy(Long id);
     void returnCopy(Long id);
+
+    //Lab 3 - additional task from school
+    Book searchBookByName(String name);
 }

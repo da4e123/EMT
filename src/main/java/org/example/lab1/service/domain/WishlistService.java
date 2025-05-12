@@ -10,18 +10,18 @@ import java.util.Optional;
 
 public interface WishlistService {
 
-    List<Wishlist> listAll();
+    List<Wishlist> listAll(String token);
 
-    Optional<Wishlist> getWishlistByUsername(String username);
-
-
-    List<Book> listAllBooksInWishlist(String username);
-
-    Optional<Wishlist> addBookInWishList(String username, Long bookId);
+    Optional<Wishlist> getWishlistByUsername(String username,String token);
 
 
+    List<Book> listAllBooksInWishlist(String username,String token);
 
-    void rentAllFromWishlist(String username);
+    Optional<Wishlist> addBookInWishList(String username, Long bookId, String token);
+
+
+
+    void rentAllFromWishlist(String username, String token);
 
 
 }
